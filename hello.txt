@@ -1,0 +1,10 @@
+websocket = Persistent connection 
+          = two way connection
+
+3-way-Handsaking - for establish connection client->server->client
+
+Http = One Time connection
+     = Not two way  => polling / long-polling
+     polling :- puchte rhna from backend aaya ya nhi
+
+
