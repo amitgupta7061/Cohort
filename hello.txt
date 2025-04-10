@@ -8,3 +8,7 @@ Http = One Time connection
      polling :- puchte rhna from backend aaya ya nhi
 
 
+
+--------------------------------------------------------------------------
+#Postgres
+

@@ -2,13 +2,12 @@ import { WebSocketServer, WebSocket } from 'ws';
 
 const wss = new WebSocketServer({ port : 8080});
 
-let userCnt = 0;
 let allSocket : WebSocket[] = [];
 
 wss.on("connection", (socket) => {
     allSocket.push(socket);
-    userCnt = userCnt + 1; 
-    console.log("user connected - " +  userCnt);
+     
+    console.log("user connected");
 
     socket.on("message", (message) => {
         console.log("message received " + message.toString());
@@ -16,6 +15,10 @@ wss.on("connection", (socket) => {
             const sc = allSocket[i];
             sc.send(message.toString() + " sent from server")
         }
+    })
+
+    socket.on("disconnect", () => {
+        allSocket = allSocket.filter(x => x != socket);
     })
     
 })
