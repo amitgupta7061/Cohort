@@ -27,22 +27,54 @@ main();
 
 app.post('/signup', async (req, res) => {
     try {
-        const {username, email, password} = req.body;
+        const {username, email, password, city, country, street, pincode} = req.body;
 
         // This is not a good way because user can inject their own query through - any field => sql injection
+
         // const response = await pgClient.query(`INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${password}');`) 
 
 
         // Best way
-        const insertQuary = `INSERT INTO users (username, email, password) VALUES ($1, $2, $3);`
+        const insertQuary = `INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id;`
+        const addressQuary = `INSERT INTO addresses (city, country, street, pincode, user_id) VALUES ($1, $2, $3, $4, $5);`
 
+
+        // adding Begin and commit make it Transaction => that means if any one will failed then the one who is completed get reversed
+
+        await pgClient.query("BEGIN;");
         const response = await pgClient.query(insertQuary, [username, email, password]);
+        const userId = response.rows[0].id;
+        const addResponse = await pgClient.query(addressQuary, [city, country, street, pincode, userId]);
+        await pgClient.query("COMMIT;");
 
 
         res.json({
-            message:"You Have Signup successfully!"
+            message:"You Have Signup successfully!",
+            addResponse,
         })
     } catch (error) {
+        console.log(error);
+        res.json({
+            message:"Internal server Error"
+        })
+    }
+})
+
+app.get('/metadata', async (req, res) => {
+    try {
+        const id = req.query.id;
+
+        const dataQueary = `SELECT users.username, users.email, addresses.city, addresses.country FROM users JOIN addresses ON users.id = addresses.user_id WHERE users.id = ${id}`;
+
+        const response = await pgClient.query(dataQueary);
+
+        res.json({
+            message:"Data fetched successfully",
+            response
+        })
+
+    } catch (error) {
+        console.log(error);
         res.json({
             message:"Internal server Error"
         })

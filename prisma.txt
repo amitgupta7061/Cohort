@@ -1,0 +1,23 @@
+# ORM : Object Relational Mapping
+    • Definition: A programming technique that maps data between object-oriented programming languages and relational databases.
+
+    • Purpose: Converts data between incompatible type systems.
+
+    • Benefit: Creates a virtual object database usable directly within the programming language.
+
+# Prisma
+    • Definition - A modern ORM for Node.js and TypeScript.
+
+    • Main Use - Interacts with databases in a type-safe and efficient way.
+
+    Key Features -
+    • Type Safety - Auto-generates types from your database schema.
+    • Prisma Client - Auto-generated query builder for DB operations.
+    • Prisma Migrate - Handles schema migrations easily.
+    • Prisma Studio - GUI to view and edit data in the DB.
+    • Supported Databases - PostgreSQL, MySQL, SQLite, SQL Server, MongoDB
+
+    -> npm i prisma
+    -> npx prisma --init 
+    -> npx prisma migrate dev  - when changes made in schema/table
+    -> npx prisma generate  - generate client
